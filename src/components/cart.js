@@ -178,7 +178,7 @@ class CustomPaginationActionsTable extends React.Component {
                     </TableCell>
 
                     <TableCell>  
-                      <CurrencyFormat value={val.harga} displayType={'text'} thousandSeparator={true} prefix={'Rp. '}/>
+                      <CurrencyFormat value={val.harga - (val.harga*(val.discount/100))} displayType={'text'} thousandSeparator={true} prefix={'Rp. '}/>
                     </TableCell>
                     <TableCell>
                         <Button 
