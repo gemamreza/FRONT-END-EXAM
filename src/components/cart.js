@@ -238,11 +238,12 @@ class CustomPaginationActionsTable extends React.Component {
     var category = this.state.rows[param].category
     var img = this.state.rows[param].img
     var quantity = this.refs.editValue.value === "" ? this.state.rows[param].quantity : this.refs.editValue.value
+    var cookie = Cookies.get('userData')
 
     var NewData = {username, userId, namaProduk , harga : parseInt(harga) , discount : parseInt(discount) , category , img , quantity : parseInt(quantity)}
     Axios.put(urlApi + '/cart/' +this.state.rows[param].id,NewData)
       .then((res) => {
-          this.getDataApi()
+          this.getDataApi(cookie)
           swal("Edit Success", "Product has been edited", "success")
           this.setState({isEdit : false , editItem : {}})
       })
