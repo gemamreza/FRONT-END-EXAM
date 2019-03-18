@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
 import User from './userGlobal'
+import UserCart from './userCartReducer'
 
 export default combineReducers({
-    user : User
+    user : User,
+    userCart : UserCart
 })

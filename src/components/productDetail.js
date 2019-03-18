@@ -2,6 +2,7 @@ import React from 'react'
 import Axios from 'axios'
 import {urlApi} from '../support/urlApi'
 import {connect} from 'react-redux'
+import {setUserCart} from '../1.actions/userCartAction'
 import CurrencyFormat from 'react-currency-format'
 import swal from 'sweetalert'
 
@@ -17,6 +18,7 @@ class ProductDetail extends React.Component {
         Axios.get(urlApi + '/product/' + idUrl)
         .then((res) => {
             this.setState({product : res.data})
+                console.log(res.data)
         })
         .catch((err) => {
             console.log(err)
@@ -28,6 +30,57 @@ class ProductDetail extends React.Component {
         if (qty < 1) {
             this.refs.inputQty.value = 1
         }
+    }
+
+    getCartValue = () => {
+        Axios.get(urlApi+'/cart')
+        .then(res => this.props.setUserCart(res.data.length))
+        .catch((err) => console.log(err))
+    }
+
+    onBtnAddToCart = () => {
+
+        var newData = {
+            username: this.props.obj,
+            userId: this.props.id,
+            namaProduk: this.state.product.nama,
+            harga: this.state.product.harga,
+            discount: this.state.product.discount,
+            category: this.state.product.category,
+            img: this.state.product.img,
+            quantity : parseInt(this.refs.inputQty.value)
+        }
+    
+
+        Axios.get(urlApi+'/cart?userId='+this.props.id+'&namaProduk='+newData.namaProduk)
+                 .then((res) => {
+                     var filterData = res.data.filter(data => data.namaProduk === newData.namaProduk);
+                     if(filterData.length !== 0){
+                         var quantity = filterData[0].quantity+newData.quantity
+                         Axios.put(urlApi+'/cart/'+filterData[0].id,{...newData, quantity})
+                             .then((res) =>{
+                                 console.log(res)
+                                 this.getCartValue();
+                                 swal('Success', 'Item added to Cart', 'success')
+                             })
+                             .catch((err) => {
+                                 console.log(err)
+                             }) 
+                     } else {
+                         this.props.setUserCart(res.data.length);
+                         Axios.post(urlApi+'/cart', newData)
+                             .then((res) =>{
+                                 console.log(res)
+                                 this.getCartValue();
+                                 swal('Success', 'Item added to Cart', 'success')
+                             })
+                             .catch((err) => {
+                                 console.log(err)
+                             })
+                     }
+                 })
+         .catch((err) => console.log(err))
+        
     }
 
     render(){
@@ -76,7 +129,7 @@ class ProductDetail extends React.Component {
                                         fontSize: '14px'
                                         }} >Jumlah</div>
 
-                                <input type='number' onChange={this.qtyValidation} ref='inputQty' min={1} placeholder='1' className='form-control' style={{width: '60px',
+                                <input type='number' defaultValue={1} onChange={this.qtyValidation} ref='inputQty' min={1} placeholder='1' className='form-control' style={{width: '60px',
                                                                                                                                             marginTop: '10px'}} />
                         </div>
 
@@ -109,7 +162,7 @@ class ProductDetail extends React.Component {
                         <div className='row mt-4'>
                             <input type='button' className='btn border-secondary col-md-2 ml-3' value='Add to Wishlist'/>
                             <input type='button' className='btn btn-primary col-md-3 ml-2' value='Buy Now'/>
-                            <input type='button' className='btn btn-success col-md-3 ml-2' value='Add to Cart'/>                            
+                            <input type='button' className='btn btn-success col-md-3 ml-2' onClick={() => this.onBtnAddToCart()} value='Add to Cart'/>                            
                         </div>
                         }
                     </div>
@@ -122,8 +175,9 @@ class ProductDetail extends React.Component {
 const mapStateToProps = (state) => {
     var obj = state.user.username
     return {
-        obj : obj
+        obj : obj,
+        id: state.user.id
     }
 }
 
-export default connect(mapStateToProps)(ProductDetail);
+export default connect(mapStateToProps,{setUserCart})(ProductDetail);

@@ -3,6 +3,7 @@ import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {urlApi} from '../support/urlApi'
 import '../support/css/product.css'
+import {setUserCart} from '../1.actions/userCartAction'
 import swal from 'sweetalert'
 import {connect} from 'react-redux'
 import CurrencyFormat from 'react-currency-format'
@@ -17,6 +18,12 @@ class ProductList extends React.Component{
     getDataProduct = () => {
         axios.get(urlApi + '/product')
         .then((res)=> this.setState({listProduct : res.data}))
+        .catch((err) => console.log(err))
+    }
+
+    getCartValue = () => {
+        axios.get(urlApi+'/cart')
+        .then(res => this.props.setUserCart(res.data.length))
         .catch((err) => console.log(err))
     }
 
@@ -42,7 +49,8 @@ class ProductList extends React.Component{
                          var quantity = res.data[0].quantity+1
                          axios.put(urlApi+'/cart/'+res.data[0].id,{...newData, quantity})
                              .then((res) =>{
-                                 console.log(res)
+                                 console.log(res);
+                                 this.getCartValue()
                                  swal('Success', 'Item added to Cart', 'success')
                              })
                              .catch((err) => {
@@ -51,7 +59,8 @@ class ProductList extends React.Component{
                      } else {
                          axios.post(urlApi+'/cart', {...newData, quantity : 1})
                              .then((res) =>{
-                                 console.log(res)
+                                 console.log(res);
+                                 this.getCartValue()
                                  swal('Success', 'Item added to Cart', 'success')
                              })
                              .catch((err) => {
@@ -114,4 +123,4 @@ const mapStateToProps = (state) => {
     }  
   }
 
-export default connect(mapStateToProps)(ProductList)
+export default connect(mapStateToProps,{setUserCart})(ProductList)
