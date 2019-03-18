@@ -252,6 +252,14 @@ class CustomPaginationActionsTable extends React.Component {
       })
   } 
 
+  getTotalHarga = ()=>{
+    var harga=0
+     for (var i=0;i<this.state.rows.length;i++){
+        harga += parseInt((this.state.rows[i].harga - (this.state.rows[i].harga *this.state.rows[i].discount/100))*this.state.rows[i].quantity)
+     }
+     return harga
+   }
+
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
@@ -272,10 +280,21 @@ class CustomPaginationActionsTable extends React.Component {
                         <TableCell style={{fontSize:'20px', fontWeight:'600'}}>QTY</TableCell>
                         <TableCell style={{fontSize:'20px', fontWeight:'600'}}>PRICE</TableCell>
                         <TableCell style={{fontSize:'20px', fontWeight:'600'}}></TableCell>
-                    </TableRow>
+                    </TableRow>       
                 </TableHead>
                 <TableBody>
                 {this.renderJsx()}
+                <TableRow>
+                <TableCell colSpan={5}><CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Total Harga : Rp. '}/></TableCell>
+                  <TableCell colSpan={1}>
+                    <Button animated color ='teal' onClick={this.checkOut}>
+                        <Button.Content visible >Check Out </Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='cart' />
+                        </Button.Content>
+                        </Button>
+                  </TableCell>
+                </TableRow>
                 {emptyRows > 0 && (
                     <TableRow style={{ height: 48 * emptyRows }}>
                     <TableCell colSpan={6} />
