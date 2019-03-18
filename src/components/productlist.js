@@ -35,8 +35,9 @@ class ProductList extends React.Component{
                  username, userId, namaProduk,
                  harga, discount, category, img
              }
-             axios.get(urlApi+'/cart?userId='+this.props.id+'&productId='+data.id)
+             axios.get(urlApi+'/cart?userId='+this.props.id+'&namaProduk='+newData.namaProduk)
                  .then((res) => {
+                     console.log(res)
                      if(res.data.length > 0){
                          var quantity = res.data[0].quantity+1
                          axios.put(urlApi+'/cart/'+res.data[0].id,{...newData, quantity})

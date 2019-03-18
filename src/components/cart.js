@@ -17,11 +17,13 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
 import {Button, Icon, Input, Label} from 'semantic-ui-react'
 import { urlApi } from '../support/urlApi';
-import swal from 'sweetalert'
-import {connect} from 'react-redux'
-import PageNotFound from '../components/pageNotfound'
-import CurrencyFormat from 'react-currency-format'
+import swal from 'sweetalert';
+import {connect} from 'react-redux';
+import PageNotFound from '../components/pageNotfound';
+import CurrencyFormat from 'react-currency-format';
+import cookie from 'universal-cookie';
 
+const Cookies = new cookie()
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -124,11 +126,12 @@ class CustomPaginationActionsTable extends React.Component {
   };
 
   componentDidMount(){
-    this.getDataApi()
+    var cookie = Cookies.get('userData')
+    this.getDataApi(cookie)
   }
 
-  getDataApi = () => {
-      Axios.get(urlApi + '/cart?username=' + this.props.username)
+  getDataApi = (nama) => {
+      Axios.get(urlApi + '/cart?username=' + nama)
       .then((res) => 
         this.setState({rows : res.data}))
       .catch((err) => console.log(err))
@@ -141,7 +144,10 @@ class CustomPaginationActionsTable extends React.Component {
   onBtnDelete = (id) => {
     Axios.delete(urlApi + '/cart/' + id)
     .then((res) => {
-        this.getDataApi()
+      var cookie = Cookies.get('userData')
+        this.getDataApi(cookie)
+        swal("Delete Success", "Product is Delete", "success")
+        
     })
     .catch((err) => console.log(err))
   }

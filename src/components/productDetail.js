@@ -3,6 +3,7 @@ import Axios from 'axios'
 import {urlApi} from '../support/urlApi'
 import {connect} from 'react-redux'
 import CurrencyFormat from 'react-currency-format'
+import swal from 'sweetalert'
 
 class ProductDetail extends React.Component {
     state = {product : {}}
