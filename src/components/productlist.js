@@ -3,6 +3,9 @@ import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {urlApi} from '../support/urlApi'
 import '../support/css/product.css'
+import swal from 'sweetalert'
+import {connect} from 'react-redux'
+import CurrencyFormat from 'react-currency-format'
 
 class ProductList extends React.Component{
     state = {listProduct : []}
@@ -17,30 +20,76 @@ class ProductList extends React.Component{
         .catch((err) => console.log(err))
     }
 
-    renderProdukJsx = () => {
+    onBtnAddToCart = (data) => {    
+        axios.get(urlApi+'/product?id='+ data.id)
+         .then((res) => {
+             var username = this.props.username
+             var userId = this.props.id
+             var namaProduk = res.data[0].nama
+             var harga = res.data[0].harga
+             var discount = res.data[0].discount
+             var category = res.data[0].category
+             var img = res.data[0].img
 
+             var newData = {
+                 username, userId, namaProduk,
+                 harga, discount, category, img
+             }
+             axios.get(urlApi+'/cart?userId='+this.props.id+'&productId='+data.id)
+                 .then((res) => {
+                     if(res.data.length > 0){
+                         var quantity = res.data[0].quantity+1
+                         axios.put(urlApi+'/cart/'+res.data[0].id,{...newData, quantity})
+                             .then((res) =>{
+                                 console.log(res)
+                                 swal('Success', 'Item added to Cart', 'success')
+                             })
+                             .catch((err) => {
+                                 console.log(err)
+                             }) 
+                     } else {
+                         axios.post(urlApi+'/cart', {...newData, quantity : 1})
+                             .then((res) =>{
+                                 console.log(res)
+                                 swal('Success', 'Item added to Cart', 'success')
+                             })
+                             .catch((err) => {
+                                 console.log(err)
+                             })
+                     }
+                 })
+         })
+         .catch((err) => console.log(err))
+ }
+
+    renderProdukJsx = () => {
         var jsx = this.state.listProduct.map((val) => {
+            // if(val.nama.toLowerCase().includes(this.props.search.toLowerCase())) { //Transfer dari Parents ke Child
             return (
-                <div className="card col-md-3 mr-5 mt-3" style={{width: '18rem'}}>
-                    <Link to = {'/product-detail/' + val.id} ><img src={val.img} height="300px" className="card-img-top" alt="image product" /></Link>
+                <div className="card col-md-3 mr-5 mt-3" style={{width: '100%'}}>
+                    <Link to = {'/product-detail/' + val.id} ><img src={val.img} height="280px" className="card-img-top" alt="image product" /></Link>
                     
                     {   
                         val.discount > 0 ?
                         <div className="discount">{val.discount}%</div>
                         : null
                     }
+                    
                     <div className="card-body">
                     <h4 className="card-text">{val.nama}</h4>
+
                     {
                         val.discount > 0 ?
-                        <p className="card-text" style={{textDecoration: 'line-through', color: 'red', display: 'inline'}}>Rp. {val.harga}</p>
+                        <CurrencyFormat value={val.harga} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} renderText={value => <p className="card-text mr-3" style={{textDecoration:'line-through', color:'red', display:'inline'}}>{value}</p>}/>
                         : null
                     }
-                    <p style={{display: 'inline', marginLeft:'10px', fontWeight:'500'}}>Rp. {val.harga - (val.harga*(val.discount/100))}</p>
-                    <input type="button" className="d-block btn btn-success" value="Add to Cart"/>
+
+                    <CurrencyFormat value={val.harga - (val.harga*(val.discount/100))} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} renderText={value => <p className="card-text mr-5" style={{display:'inline',fontWeight:'700'}}>{value}</p>}/>
+                    <input type="button" className="d-block btn btn-success mt-2" onClick={() => this.onBtnAddToCart(val)} value="Add to Cart"/>
                     </div>
                 </div>
             )
+            // }
         })
         return jsx
     }
@@ -55,4 +104,13 @@ class ProductList extends React.Component{
         )
     }
 }
-export default ProductList
+
+const mapStateToProps = (state) => {
+    return {
+      role : state.user.role,
+      username: state.user.username,
+      id: state.user.id,
+    }  
+  }
+
+export default connect(mapStateToProps)(ProductList)

@@ -79,7 +79,12 @@ class HeaderKu extends Component{
                                     <NavLink>Hello, {this.props.bebas}</NavLink>
                                 </NavItem>                                   
                                     <NavItem>
-                                        <Link to="/login"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart</NavLink></Link>
+                                        {
+                                            this.props.role === 'user'
+                                            ?
+                                            <Link to="/cart"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart</NavLink></Link>
+                                            : null
+                                        }
                                     </NavItem>
                                     <UncontrolledDropdown nav inNavbar>
                                         <DropdownToggle nav caret>
@@ -94,14 +99,13 @@ class HeaderKu extends Component{
                                                     Manage Product
                                                 </DropdownItem>
                                             </Link>
-                                            : null
+                                            : 
+                                            <Link to = '/history'>
+                                                <DropdownItem>
+                                                    History Transaksi
+                                                </DropdownItem>
+                                            </Link>
                                         }
-                                        <DropdownItem>
-                                            History Transaksi
-                                        </DropdownItem>
-                                        <DropdownItem>
-                                            Edit Profile
-                                        </DropdownItem>
                                         <DropdownItem divider />
                                         <DropdownItem onClick={this.onBtnLogout}>
                                             Log Out

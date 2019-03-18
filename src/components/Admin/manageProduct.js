@@ -265,12 +265,12 @@ class CustomPaginationActionsTable extends React.Component {
                 <TableHead>
                     <TableRow>
                         <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ID</TableCell>
-                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAMA</TableCell>
-                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>HARGA</TableCell>
-                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DIS</TableCell>
+                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAME</TableCell>
+                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>PRICE</TableCell>
+                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DISC</TableCell>
                         <TableCell style={{fontSize:'24px', fontWeight:'600'}}>CAT</TableCell>
-                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>IMG</TableCell>
-                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DESk</TableCell>
+                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>VIEW</TableCell>
+                        <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DESC</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -396,9 +396,7 @@ CustomPaginationActionsTable.propTypes = {
 const mapStateToProps = (state) => {
   return {
     role : state.user.role
-  }
-    
-  
+  }  
 }
 
 export default connect(mapStateToProps)(withStyles(styles)(CustomPaginationActionsTable));

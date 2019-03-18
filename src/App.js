@@ -8,6 +8,8 @@ import Manage from './components/Admin/manageProduct'
 import PageNotFound from './components/pageNotfound'
 import ProductDetail from './components/productDetail'
 import ScrollToTop from './components/scrollToTop'
+import History from './components/historyTransaksi'
+import Cart from './components/cart'
 // withRoutier untuk tersambung ke reducer dengan connect, tapi di dalam komponen ada routing
 import { Route, withRouter, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -36,6 +38,8 @@ class App extends Component {
           <Route path='/product' component={Product} exact/>
           <Route path='/manage' component={Manage} exact/>
           <Route path='/product-detail/:id' component={ProductDetail} exact/>
+          <Route path='/cart' component={Cart} exact/>          
+          <Route path='/history' component={History} exact/>
           <Route path='*' component={PageNotFound} exact/>
           </Switch>
           </ScrollToTop>          
