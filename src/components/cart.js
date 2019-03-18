@@ -192,7 +192,9 @@ class CustomPaginationActionsTable extends React.Component {
                           }
                         </Button.Content>
                         <Button.Content hidden>
-                            <Icon name='edit' />
+                          {
+                            this.state.isEdit === true && this.state.editItem === index ? <Icon name='save' /> : <Icon name='edit' />
+                          }
                         </Button.Content>
                         </Button>
                         <Button 
