@@ -15,7 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
-import {Button, Icon, Input, Label} from 'semantic-ui-react'
+import {Button, Icon } from 'semantic-ui-react'
 import { urlApi } from '../support/urlApi';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
@@ -147,6 +147,7 @@ class CustomPaginationActionsTable extends React.Component {
     .then((res) => {
       var cookie = Cookies.get('userData')
         this.getDataApi(cookie)
+        //this.getCartValue()
         swal("Delete Success", "Product is Delete", "success")
         
     })
@@ -170,7 +171,7 @@ class CustomPaginationActionsTable extends React.Component {
               <TableCell component="th" scope="row">
                   {val.namaProduk}
               </TableCell>
-              <TableCell><img src={val.img} height='50px'/></TableCell>
+              <TableCell><img src={val.img} height='50px' alt="Cart"/></TableCell>
               
               <TableCell>
                 {this.state.editItem === index && this.state.isEdit === true ? (
@@ -272,7 +273,7 @@ class CustomPaginationActionsTable extends React.Component {
     .then((res) => {
       console.log(res)
       const newData = {
-        date: new Date(),
+        date: new Date().toISOString().slice(0,10),
         userId: res.data[0].id,
         listCart: res.data
       }
@@ -306,7 +307,7 @@ class CustomPaginationActionsTable extends React.Component {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    var {nama, harga, discount, deskripsi, img, category} = this.state.editItem
+    //var {nama, harga, discount, deskripsi, img, category} = this.state.editItem
     if (this.props.role === 'user')
     {
     return (

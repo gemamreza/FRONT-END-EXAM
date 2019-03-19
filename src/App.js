@@ -14,7 +14,7 @@ import Cart from './components/cart'
 import { Route, withRouter, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cookie from 'universal-cookie'
-import { keepLogin } from './1.actions'
+import { keepLogin, cookieChecked } from './1.actions'
 import './App.css';
 
 const objCookie = new cookie()
@@ -23,10 +23,13 @@ class App extends Component {
     var terserah = objCookie.get('userData')
     if(terserah !== undefined) {
       this.props.keepLogin(terserah)
+    } else {
+      this.props.cookieChecked()
     }
   }
 
   render() {
+    if(this.props.cookie){
     return (
       <div>
           <Navbar/>          
@@ -45,8 +48,16 @@ class App extends Component {
           </ScrollToTop>          
       </div>
     );
+    }
+    return <div> Loading...</div>
   }
 }
 
-export default withRouter(connect(null, {keepLogin})(App));
+const mapStateToProps = (state) => {
+  return {
+    cookie : state.user.cookie,
+    id : state.user.id
+  }
+}
+export default withRouter(connect(mapStateToProps, {keepLogin, cookieChecked})(App));
 

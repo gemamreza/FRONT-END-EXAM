@@ -25,14 +25,14 @@ class HeaderKu extends Component{
          isOpen: !this.state.isOpen
        });
     }
-
+   
     onBtnLogout = () => {
         objCookie.remove('userData')
         this.props.resetUser()
     }
 
     getCartValue = () => {
-        Axios.get(urlApi+'/cart')
+        Axios.get(urlApi+'/cart?username=')
         .then(res => this.props.setUserCart(res.data.length))
         .catch((err) => console.log(err))
     }

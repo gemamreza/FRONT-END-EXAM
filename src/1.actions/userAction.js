@@ -69,6 +69,12 @@ export const keepLogin = (cookie) => {
     }    
 }
 
+export const cookieChecked = () =>{
+    return {
+        type : 'COOKIE_CHECKED'
+    }
+}
+
 export const resetUser = () => {
     return {
         type : 'RESET_USER'

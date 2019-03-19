@@ -8,6 +8,7 @@ import swal from 'sweetalert'
 import {connect} from 'react-redux'
 import CurrencyFormat from 'react-currency-format'
 
+
 class ProductList extends React.Component{
     state = {listProduct : []}
 
@@ -77,7 +78,7 @@ class ProductList extends React.Component{
             // if(val.nama.toLowerCase().includes(this.props.search.toLowerCase())) { //Transfer dari Parents ke Child
             return (
                 <div className="card col-md-3 mr-5 mt-3" style={{width: '100%'}}>
-                    <Link to = {'/product-detail/' + val.id} ><img src={val.img} height="280px" className="card-img-top" alt="image product" /></Link>
+                    <Link to = {'/product-detail/' + val.id} ><img src={val.img} height="280px" className="card-img-top" alt="product" /></Link>
                     
                     {   
                         val.discount > 0 ?
@@ -87,7 +88,7 @@ class ProductList extends React.Component{
                     
                     <div className="card-body">
                     <h4 className="card-text">{val.nama}</h4>
-
+                    <div className="category">{val.category}</div>
                     {
                         val.discount > 0 ?
                         <CurrencyFormat value={val.harga} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} renderText={value => <p className="card-text mr-3" style={{textDecoration:'line-through', color:'red', display:'inline'}}>{value}</p>}/>
@@ -95,7 +96,12 @@ class ProductList extends React.Component{
                     }
 
                     <CurrencyFormat value={val.harga - (val.harga*(val.discount/100))} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} renderText={value => <p className="card-text mr-5" style={{display:'inline',fontWeight:'700'}}>{value}</p>}/>
-                    <input type="button" className="d-block btn btn-success mt-2" onClick={() => this.onBtnAddToCart(val)} value="Add to Cart"/>
+                    {
+                        this.props.username === "" ?
+                        <Link to='/login'><input type="button" className="d-block btn btn-success mt-2" value="Add to Cart"/></Link>
+                        : <input type="button" className="d-block btn btn-success mt-2" onClick={() => this.onBtnAddToCart(val)} value="Add to Cart"/>
+                    }
+                    
                     </div>
                 </div>
             )

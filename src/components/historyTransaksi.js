@@ -15,12 +15,11 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
-import {Button, Icon, Input, Label} from 'semantic-ui-react'
+import {Button, Icon} from 'semantic-ui-react'
 import { urlApi } from '../support/urlApi';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
 import PageNotFound from '../components/pageNotfound';
-import CurrencyFormat from 'react-currency-format';
 import {setUserCart} from '../1.actions/userCartAction'
 
 const actionsStyles = theme => ({
@@ -173,7 +172,7 @@ class CustomPaginationActionsTable extends React.Component {
                         </Button.Content>
                         </Button>
                     </TableCell>
-                    </TableRow>
+              </TableRow>
         )
     })
     return jsx
@@ -215,7 +214,7 @@ class CustomPaginationActionsTable extends React.Component {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    var {nama, harga, discount, deskripsi, img, category} = this.state.editItem
+    //var {nama, harga, discount, deskripsi, img, category} = this.state.editItem
     if (this.props.role === 'user')
     {
       
